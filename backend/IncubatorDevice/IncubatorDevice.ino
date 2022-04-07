@@ -7,6 +7,13 @@
 #include <math.h>
 #include <EEPROM.h>
 
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
 
 
 #define EEPROM_SIZE 100
@@ -16,6 +23,7 @@
 #error Select ESP8266 board.
 #endif
 
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 //Server Connections
 const char* mqtt_server = "0657fea3e3c14f5cb989d7bffd886dfd.s1.eu.hivemq.cloud";
@@ -30,13 +38,21 @@ char msg[MSG_BUFFER_SIZE];
 int value =0;
 
 /***
- Device battery Status declerations
+ Device battery Status declarations
 ***/
-float tempreature = 0;
-float humidity    = 0;
-float humidity    = 0;
-float maxPower    = 0;
-float heaterOntime = 0;
+float tempreature     = 0;
+float humidity        = 0;
+float inputVoltage    = 0;
+float maxPower        = 0;
+float heaterOntime    = 0;
+
+//int sw[] = {d4, d5, d6, s3};
+//int relay d3;
+//int dht d0;
+//int sound A0;
+//int servo1 d7;
+//int servo d8;
+//int oled sda d2, sck d1
 
 
 bool accesspoint = true;
@@ -137,6 +153,24 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
+
+  //setup oled 
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;);
+  }
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 16);
+  // Display static text
+  display.println("smartIncubator");
+  display.display();
+  delay(500);
+  display.clearDisplay();
+
+  //setup broker
   while(!Serial) delay(1);
 
   Serial.println("All state initialized");
