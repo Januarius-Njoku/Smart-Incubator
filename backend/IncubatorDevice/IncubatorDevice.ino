@@ -33,7 +33,9 @@
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
+ 
+// pin setup for the fans
+const int fan_relay ;
 
 
 #define EEPROM_SIZE 100
@@ -202,6 +204,8 @@ void setup() {
   servo1.write(0);
   servo2.write(0);
 
+  pinMode(fan_relay, OUTPUT);
+
   for(int i = 0; i < numOfInputs; i++) {
     pinMode(inputPins[i], INPUT);
     digitalWrite(inputPins[i], HIGH); // pull-up 20k
@@ -253,6 +257,13 @@ void loop() {
   }
 
   float hi = dht.computeHeatIndex(t);
+  if(t >= 38.05 && h >= 54){
+    digitalWrite(fan_relay, HIGH);
+  }
+
+  else{
+    digitalWrite(fan_relay, LOW);
+  }
   
   if (!client.connected()) {
     reconnect();
@@ -275,6 +286,8 @@ void loop() {
 
   setInputFlags();
   resolveInputFlags();
+
+
 
 }
 
