@@ -20,7 +20,10 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <DHT.h>
 
+#define dht_pin 3
+#define dht_type DHT11
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -33,6 +36,7 @@
 #error Select ESP8266 board.
 #endif
 
+DHT dht(dht_pin, dht_type);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 //Server Connections
@@ -179,8 +183,9 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
+  dht.begin();
 
-    for(int i = 0; i < numOfInputs; i++) {
+  for(int i = 0; i < numOfInputs; i++) {
     pinMode(inputPins[i], INPUT);
     digitalWrite(inputPins[i], HIGH); // pull-up 20k
   }
@@ -219,7 +224,17 @@ void setup() {
 
 void loop() {
 
-   if (!client.connected()) {
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+
+  if(isnan(t) || isnan(h)){
+    Serial.print("failed to read value from DHT11");
+    return;
+  }
+
+  float hi = dht.computeHeatIndex(t);
+  
+  if (!client.connected()) {
     reconnect();
   }
   client.loop();
