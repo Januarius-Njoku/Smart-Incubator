@@ -21,7 +21,10 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <DHT.h>
+#include <Servo.h>
 
+#define servo1_pin 
+#define servo2_pin
 #define dht_pin 3
 #define dht_type DHT11
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -36,6 +39,8 @@
 #error Select ESP8266 board.
 #endif
 
+Servo servo1;
+Servo servo2;
 DHT dht(dht_pin, dht_type);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
@@ -184,6 +189,11 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   dht.begin();
+  servo1.attach(servo1_pin);
+  servo2.attach(servo2_pin);
+
+  servo1.write(0);
+  servo2.write(0);
 
   for(int i = 0; i < numOfInputs; i++) {
     pinMode(inputPins[i], INPUT);
@@ -211,6 +221,7 @@ void setup() {
 
   setup_wifi();
   espClient.setFingerprint(fingerprint);
+  espClient.setInsecure()
   
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
