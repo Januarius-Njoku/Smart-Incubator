@@ -23,10 +23,14 @@
 #include <DHT.h>
 #include <Servo.h>
 
+//connect the servos to these pins
 #define servo1_pin 
 #define servo2_pin
+
+//connect the DHT11 sensor to this pin and define the types of sensor used
 #define dht_pin 3
 #define dht_type DHT11
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -189,9 +193,12 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   dht.begin();
+
+  
   servo1.attach(servo1_pin);
   servo2.attach(servo2_pin);
 
+  //set default point or starting point for the servos
   servo1.write(0);
   servo2.write(0);
 
@@ -221,6 +228,8 @@ void setup() {
 
   setup_wifi();
   espClient.setFingerprint(fingerprint);
+
+  //set to not secure if the finger prints are incorrect
   espClient.setInsecure()
   
   client.setServer(mqtt_server, mqtt_port);
