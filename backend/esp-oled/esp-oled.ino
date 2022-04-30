@@ -18,7 +18,7 @@ void setup() {
 //  delay(2000);
   display.clearDisplay();
 
-  display.setTextSize(2);
+  display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 16);
   // Display static text
