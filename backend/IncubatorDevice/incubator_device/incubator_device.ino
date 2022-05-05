@@ -16,7 +16,7 @@
 
 #define dht11 14
 #define sound_sensor A0
-#define fan_relay 2
+#define fan_relay 0
 
 int battery = 5;
 
