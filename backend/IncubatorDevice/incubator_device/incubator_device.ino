@@ -12,7 +12,7 @@
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME  "incubator"
-#define AIO_KEY       "aio_oDxb76WO6b2rICbGh9HVbySsQ1mC"
+#define AIO_KEY       "aio_MVpj39VdsahsJwKWZj72tou0WLAq"
 
 #define dht11 14
 #define sound_sensor A0
@@ -130,6 +130,16 @@ void loop(){
   float t = dht.readTemperature(); 
   Temperature.publish(t);
   Humidity.publish(h);
+
+  display.setCursor(0, 16);
+    // Display static text
+  display.clearDisplay();
+  display.print("Temp: ");
+  display.println(t);
+  display.setCursor(0, 26);
+  display.print("HUM: ");
+  display.println(h);
+  display.display();
   Serial.println(h);
   Serial.println(t);
 
@@ -155,7 +165,7 @@ void loop(){
     digitalWrite(fan_relay, LOW);
   }
   
-  delay(1000);
+  delay(2000);
 
 }
 
