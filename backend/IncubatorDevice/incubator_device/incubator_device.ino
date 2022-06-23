@@ -12,7 +12,7 @@
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883
 #define AIO_USERNAME  "incubator"
-#define AIO_KEY       "aio_MVpj39VdsahsJwKWZj72tou0WLAq"
+#define AIO_KEY       "aio_RIMd74tMcBPHr3aP0Ff3o5cZPLSJ"
 
 #define dht11 14
 #define sound_sensor A0
